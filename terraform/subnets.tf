@@ -14,8 +14,10 @@ resource "aws_subnet" "private_subnet" {
     vpc_id = aws_vpc.main-vpc.id
     cidr_block = var.private_subnet_cidrs[count.index]
     availability_zone = var.availability_zones[count.index]
+    map_public_ip_on_launch = false
 
     tags = {
-        Name = "main-subnet-private${count.index + 1}-${var.availability_zones[count.index]}"
+        Name = "main-subnet-private${count.index + 1}-${var.availability_zones[count.index]}"   
+        Type = "private"
     }
 }
