@@ -1,14 +1,14 @@
 resource "aws_security_group" "eks_sg" {
   name        = "main-eks-cluster-sg"
   description = "Security Group for EKS Cluster"
-  vpc_id      = aws_vpc.main-vpc.id
+  vpc_id      = aws_vpc.main_vpc.id
 
   # Allow inbound traffic from the load balancer to the worker nodes
   ingress {
     from_port   = 80
     to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    protocol    = "tcp"    
+    security_groups = [aws_security_group.lb_sg.id]
   }
 
   # Allow all outbound traffic
@@ -27,7 +27,7 @@ resource "aws_security_group" "eks_sg" {
 resource "aws_security_group" "lb_sg" {
     name        = "main-loadbalancer-sg"
     description = "Security Group for Load Balancer"
-    vpc_id = aws_vpc.main-vpc.id
+    vpc_id = aws_vpc.main_vpc.id
 
     # Allow inbound HTTP traffic
     ingress {
