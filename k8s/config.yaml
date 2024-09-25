@@ -5,7 +5,7 @@ metadata:
 data:
   config.yaml: |
     database:
-      host: dpg-cqd4stmehbks73bpl570-a.oregon-postgres.render.com
+      host: my-postgres-db.clmy18jh3kvo.us-east-1.rds.amazonaws.com
       port: 5432
       username: secretuser
-      password: meZxka6zIaROJ1lJQ27jFEhGJVZE8tgv
+      password: mysecretpassword

@@ -57,3 +57,26 @@ resource "aws_security_group" "lb_sg" {
       Name = "main-loadbalancer-sg"
     }
   }
+
+  resource "aws_security_group" "rds_sg" {
+  name   = "allow-postgres-access"
+  vpc_id = aws_vpc.main_vpc.id
+
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # Permite acesso público de qualquer lugar. *Tome cuidado com segurança.*
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"  # Permite todo o tráfego de saída
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "RDS Security Group"
+  }
+}

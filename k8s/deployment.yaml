@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: tech-challenge-monolith
-          image: aureobueno/tech-challenge-monolith:4.0
+          image: devfauze/techchallengemonolith:lastest
           ports:
             - containerPort: 3000
           env:

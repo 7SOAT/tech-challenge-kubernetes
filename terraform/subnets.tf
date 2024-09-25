@@ -21,3 +21,12 @@ resource "aws_subnet" "private_subnet" {
         Type = "private"
     }
 }
+
+resource "aws_db_subnet_group" "rds_subnet_group" {
+  name       = "my-rds-subnet-group"
+  subnet_ids = aws_subnet.public_subnet[*].id  # Subnets privadas ou públicas dependendo da sua arquitetura
+
+  tags = {
+    Name = "RDS Subnet Group"
+  }
+}
