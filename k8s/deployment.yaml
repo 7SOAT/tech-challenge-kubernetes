@@ -16,26 +16,16 @@ spec:
     spec:
       containers:
         - name: tech-challenge-monolith
-          image: devfauze/techchallengemonolith:lastest
+          image: luizpainodev/tech-challenge-monolith:latest
           ports:
-            - containerPort: 3000
-          env:
-            - name: NODE_ENV
-              value: "production"
-            - name: CONFIG_FILE
-              value: "/app/config/config.yaml"
-          volumeMounts:
-            - name: config-volume
-              mountPath: /app/config
-              subPath: config.yaml
+            - containerPort: 80
+          envFrom:
+          - configMapRef:
+              name: tech-challenge-config
           resources:
             requests:
               memory: "64Mi"
               cpu: "250m"
             limits:
               memory: "128Mi"
-              cpu: "500m"
-      volumes:
-        - name: config-volume
-          configMap:
-            name: tech-challenge-config
+              cpu: "500m"      
