@@ -10,6 +10,11 @@ resource "aws_lb" "main_alb" {
     tags = {
         Name = "main-alb"
     }
+
+    depends_on = [ 
+        aws_security_group.lb_sg,
+        aws_subnet.private_subnet
+    ]
 }
 
 resource "aws_lb_listener" "http" {
@@ -21,4 +26,8 @@ resource "aws_lb_listener" "http" {
       type = "forward"
       target_group_arn = aws_lb_target_group.main_tg.arn
     }
+
+    depends_on = [ 
+        aws_lb_target_group.main_tg 
+    ]
 }

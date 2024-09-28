@@ -4,6 +4,8 @@ resource "aws_internet_gateway" "igw" {
     tags = {
         Name = "main-igw"
     }
+
+    depends_on = [ aws_vpc.main_vpc ]
 }
 
 resource "aws_nat_gateway" "nat_gw" {
@@ -14,4 +16,9 @@ resource "aws_nat_gateway" "nat_gw" {
     tags = {
         Name = "main-nat-gateway-${count.index + 1}"
     }
+
+    depends_on = [ 
+        aws_eip.nat_eip, 
+        aws_subnet.public_subnet
+    ]
 }
