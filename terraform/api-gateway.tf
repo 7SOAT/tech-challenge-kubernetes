@@ -17,6 +17,9 @@ resource "aws_apigatewayv2_integration" "lb_integration" {
   integration_method = "ANY"
   connection_id = aws_apigatewayv2_vpc_link.main_vpc_link.id
   connection_type = "VPC_LINK"
+  request_parameters = {
+    "overwrite:path" = "/"
+  }
 }
 
 resource "aws_apigatewayv2_route" "proxy" {
@@ -30,3 +33,7 @@ resource "aws_apigatewayv2_stage" "default_stage" {
   name = "$default"
   auto_deploy = true
 }
+
+
+
+
