@@ -3,6 +3,7 @@ resource "aws_lb_target_group" "main_tg" {
     port = 80
     protocol = "HTTP"
     vpc_id = aws_vpc.main_vpc.id
+    target_type = "ip"
 
     health_check {
       path = "/health"
@@ -15,4 +16,11 @@ resource "aws_lb_target_group" "main_tg" {
     tags = {
         Name = "main-target-group"
     }
+}
+
+resource "aws_lb_target_group_attachment" "main_eks_targets" {
+  count = length(data.aws_instances.main_eks_nodes.private_ips)
+  target_group_arn = aws_lb_target_group.main_tg.arn
+  target_id = data.aws_instances.main_eks_nodes.private_ips[count.index]
+  port = 80
 }
