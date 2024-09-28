@@ -6,23 +6,11 @@ resource "aws_eks_cluster" "tech_challenge_cluster" {
     subnet_ids         = aws_subnet.private_subnet[*].id
     security_group_ids = [aws_security_group.eks_sg.id]
   }
-}
 
-resource "aws_launch_template" "main_eks_nodes" {
-  name_prefix = "eks-node-"
-  image_id = data.aws_ami.eks_worker.id
-  instance_type = "t2.micro"
-
-  network_interfaces {
-    security_groups = [aws_security_group.eks_sg.id]
-  }
-
-  tag_specifications {
-    resource_type = "instance"
-    tags = {
-      Name = "eks-node"
-    }
-  }
+  depends_on = [ 
+    aws_subnet.private_subnet, 
+    aws_security_group.eks_sg
+  ]
 }
 
 resource "aws_eks_node_group" "main_nodes" {
@@ -37,12 +25,15 @@ resource "aws_eks_node_group" "main_nodes" {
     min_size     = 1
   }
 
-  launch_template {
-    id = aws_launch_template.main_eks_nodes.id
-    version = "$Latest"
-  }
+  instance_types = ["t2.micro"]  # Tipo de instância dos nós
+  disk_size      = 20            # Tamanho do disco dos nós (em GB)
 
   tags = {
     Name = "main-node-group"
   }
+
+  depends_on = [ 
+    aws_eks_cluster.tech_challenge_cluster,
+    aws_subnet.private_subnet
+  ]
 }

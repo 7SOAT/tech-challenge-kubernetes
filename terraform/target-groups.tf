@@ -16,6 +16,8 @@ resource "aws_lb_target_group" "main_tg" {
     tags = {
         Name = "main-target-group"
     }
+
+    depends_on = [ aws_vpc.main_vpc ]
 }
 
 resource "aws_lb_target_group_attachment" "main_eks_targets" {
@@ -23,4 +25,6 @@ resource "aws_lb_target_group_attachment" "main_eks_targets" {
   target_group_arn = aws_lb_target_group.main_tg.arn
   target_id = data.aws_instances.main_eks_nodes.private_ips[count.index]
   port = 80
+
+  depends_on = [ aws_lb_target_group.main_tg, ]
 }

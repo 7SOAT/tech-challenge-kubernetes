@@ -9,12 +9,17 @@ resource "aws_route_table" "public_rt" {
     tags = {
         Name = "main-rtb-public"
     }
+
+    depends_on = [
+        aws_vpc.main_vpc,
+        aws_internet_gateway.igw
+    ]
 }
 
 resource "aws_route_table" "private_rt" {
     count = length(var.private_subnet_cidrs)
     vpc_id = aws_vpc.main_vpc.id
-    
+
 
     route {
         cidr_block = "0.0.0.0/0"
@@ -24,4 +29,9 @@ resource "aws_route_table" "private_rt" {
     tags = {
         Name = "main-rtb-private${count.index + 1}-${var.availability_zones[count.index]}"
     }
+
+    depends_on = [ 
+        aws_vpc.main_vpc,
+        aws_nat_gateway.nat_gw
+    ]
 }

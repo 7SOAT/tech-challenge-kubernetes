@@ -7,6 +7,8 @@ resource "aws_subnet" "public_subnet" {
     tags = {
         Name = "main-subnet-public${count.index + 1}-${var.availability_zones[count.index]}"
     }
+
+    depends_on = [ aws_vpc.main_vpc ]
 }
 
 resource "aws_subnet" "private_subnet" {
@@ -20,6 +22,8 @@ resource "aws_subnet" "private_subnet" {
         Name = "main-subnet-private${count.index + 1}-${var.availability_zones[count.index]}"   
         Type = "private"
     }
+
+    depends_on = [ aws_vpc.main_vpc ]
 }
 
 resource "aws_db_subnet_group" "rds_subnet_group" {
@@ -29,5 +33,6 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
   tags = {
     Name = "RDS Subnet Group"
   }
-  
+
+  depends_on = [ aws_subnet.public_subnet ]  
 }
