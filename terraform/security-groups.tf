@@ -1,5 +1,5 @@
 resource "aws_security_group" "eks_sg" {
-  name        = "main-eks-cluster-sg"
+  name        = "EKS Cluster Security Group"
   description = "Security Group for EKS Cluster"
   vpc_id      = aws_vpc.main_vpc.id
 
@@ -8,7 +8,14 @@ resource "aws_security_group" "eks_sg" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"    
-    security_groups = [aws_security_group.lb_sg.id]
+    security_groups = [aws_security_group.nlb_sg.id]
+  }
+  
+  ingress {
+    from_port   = 4000
+    to_port     = 4000
+    protocol    = "tcp"    
+    security_groups = [aws_security_group.nlb_sg.id]
   }
 
   # Allow all outbound traffic
@@ -25,13 +32,13 @@ resource "aws_security_group" "eks_sg" {
 
   depends_on = [
      aws_vpc.main_vpc, 
-     aws_security_group.lb_sg
+     aws_security_group.nlb_sg
   ]
 }
 
-resource "aws_security_group" "lb_sg" {
-  name        = "main-loadbalancer-sg"
-  description = "Security Group for Load Balancer"
+resource "aws_security_group" "nlb_sg" {
+  name        = "NLB Security Group"
+  description = "Security Group for Network Load Balancer"
   vpc_id = aws_vpc.main_vpc.id
 
   # Allow inbound HTTP traffic
@@ -39,7 +46,7 @@ resource "aws_security_group" "lb_sg" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.vpc_cidr_block]
   }
 
   # Allow inbound HTTPS traffic
@@ -47,45 +54,60 @@ resource "aws_security_group" "lb_sg" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.vpc_cidr_block]
   }
 
   # Allow all outbound traffic
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr_block]
+  }
+
+  egress {
+    from_port   = 80
+    to_port     = 4000
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr_block]
+  }
+
+  egress {
+    from_port   = 443
+    to_port     = 4000
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr_block]
   }
 
   tags = {
-    Name = "main-loadbalancer-sg"
+    Name = "Network Load Balancer SG"
   }
 
   depends_on = [ aws_vpc.main_vpc ]
 }
 
-resource "aws_security_group" "rds_sg" {
-  name   = "allow-postgres-access"
+resource "aws_security_group" "api_gateway_sg" {
+  name = "API Gateway Security Group"
+  description = "Allow traffico from API Gateway to NLB"
   vpc_id = aws_vpc.main_vpc.id
 
   ingress {
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Permite acesso público de qualquer lugar. *Tome cuidado com segurança.*
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = [var.vpc_cidr_block]
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"  # Permite todo o tráfego de saída
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    security_groups = [aws_security_group.nlb_sg.id]
   }
 
   tags = {
-    Name = "RDS Security Group"
+    Name = "API Gateway Security Group"
   }
 
-  depends_on = [ aws_vpc.main_vpc ]
+  depends_on = [ aws_security_group.nlb_sg ]
 }

@@ -26,13 +26,13 @@ resource "aws_subnet" "private_subnet" {
     depends_on = [ aws_vpc.main_vpc ]
 }
 
-resource "aws_db_subnet_group" "rds_subnet_group" {
-  name       = "my-rds-subnet-group"
-  subnet_ids = aws_subnet.public_subnet[*].id  # Subnets privadas ou públicas dependendo da sua arquitetura
+resource "aws_db_subnet_group" "main_rds_subnet_group" {
+  name       = "main-rds-subnet-group"
+  subnet_ids = aws_subnet.private_subnet[*].id
 
   tags = {
-    Name = "RDS Subnet Group"
+    Name = "main-rds-subnet-group"
   }
 
-  depends_on = [ aws_subnet.public_subnet ]  
+  depends_on = [ aws_subnet.private_subnet ]  
 }

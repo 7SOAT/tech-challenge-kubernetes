@@ -23,3 +23,31 @@ variable "aws_iam_labrole_arn" {
     type = string
     description = "ARN do role "
 }
+
+variable "aws_rds_username" {
+    type = string
+    description = "RDS DB Instance username."
+}
+
+variable "aws_rds_password" {
+    type = string
+    description = "RDS DB Instance password."
+}
+
+variable "aws_rds_dbname" {
+    type = string
+    description = "RDS DB Instance database name."
+}
+
+variable "tech_challenge_api_port" {
+    type = number
+    default = 4000
+}
+
+variable "eks_access_policy_arn" {
+    type = string
+}
+
+variable "eks_access_principal_arn" {
+    type = string
+}
