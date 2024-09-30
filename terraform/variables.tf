@@ -24,6 +24,11 @@ variable "aws_iam_labrole_arn" {
     description = "ARN do role "
 }
 
+variable "eks_nodes_port" {
+    type = number
+    default = 30564
+}
+
 variable "aws_rds_username" {
     type = string
     description = "RDS DB Instance username."
@@ -42,12 +47,4 @@ variable "aws_rds_dbname" {
 variable "tech_challenge_api_port" {
     type = number
     default = 4000
-}
-
-variable "eks_access_policy_arn" {
-    type = string
-}
-
-variable "eks_access_principal_arn" {
-    type = string
 }

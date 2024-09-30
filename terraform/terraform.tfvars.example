@@ -3,5 +3,3 @@ aws_rds_dbname = ""
 aws_rds_username = ""
 aws_rds_password = ""
 tech_challenge_api_port = 4000
-eks_access_policy_arn = ""
-eks_access_principal_arn = ""
