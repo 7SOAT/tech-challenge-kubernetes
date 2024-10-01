@@ -16,8 +16,7 @@ spec:
     spec:
       containers:
         - name: tech-challenge-monolith
-          # image: luizpainodev/tech-challenge-monolith:latest
-          image: luizpainodev/hello-world:latest
+          image: luizpainodev/tech-challenge-monolith:latest
           ports:
             - containerPort: 4000
           envFrom:
