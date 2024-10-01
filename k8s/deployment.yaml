@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tech-challenge-monolith
+  name: tech-challenge-monolith  
   labels:
     app: tech-challenge-monolith
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: tech-challenge-monolith
@@ -18,7 +18,7 @@ spec:
         - name: tech-challenge-monolith
           image: luizpainodev/tech-challenge-monolith:latest
           ports:
-            - containerPort: 80
+            - containerPort: 4000
           envFrom:
           - configMapRef:
               name: tech-challenge-config
