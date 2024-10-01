@@ -8,10 +8,10 @@ on:
 env:
   REGION_DEFAULT: us-east-1
   TF_VAR_aws_iam_labrole_arn: ${{ secrets.TF_VAR_AWS_IAM_LABROLE_ARN }}
-  TF_VAR_aws_rds_dbname: ${{ TF_VAR_AWS_RDS_DBNAME }}
-  TF_VAR_aws_rds_username: ${{ TF_VAR_AWS_RDS_USERNAME }}
-  TF_VAR_aws_rds_password: ${{ TF_VAR_AWS_RDS_PASSWORD }}
-  TF_VAR_tech_challenge_api_port: ${{ TF_VAR_TECH_CHALLENGE_API_PORT }}
+  TF_VAR_aws_rds_dbname: ${{ secrets.TF_VAR_AWS_RDS_DBNAME }}
+  TF_VAR_aws_rds_username: ${{ secrets.TF_VAR_AWS_RDS_USERNAME }}
+  TF_VAR_aws_rds_password: ${{ secrets.TF_VAR_AWS_RDS_PASSWORD }}
+  TF_VAR_tech_challenge_api_port: ${{ secrets.TF_VAR_TECH_CHALLENGE_API_PORT }}
 
 jobs:
   create_infra:
