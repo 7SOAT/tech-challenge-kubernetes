@@ -111,3 +111,27 @@ resource "aws_security_group" "api_gateway_sg" {
 
   depends_on = [ aws_security_group.nlb_sg ]
 }
+
+resource "aws_security_group" "rds_sg" {
+  name = "RDS Security Group"
+  description = "allow applications to connect into db instace"
+  vpc_id = aws_vpc.main_vpc.id
+
+  ingress {
+    from_port = 5432
+    to_port = 5432
+    protocol = "tcp"
+    security_groups = [aws_security_group.eks_sg.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "RDS Security Group"
+  }
+}
