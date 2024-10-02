@@ -9,7 +9,7 @@ resource "aws_cognito_user_pool" "main_user_pool" {
         require_uppercase = false
     }
 
-    username_attributes = ["username", "email"]
+    username_attributes = []
     
     auto_verified_attributes = ["email"]
 
@@ -53,4 +53,14 @@ resource "aws_cognito_identity_pool_roles_attachment" "main-role" {
     roles = {
         iam = var.aws_iam_labrole_arn
     }
+}
+
+resource "aws_cognito_user_group" "customers" {
+    name = "customers"
+    user_pool_id = aws_cognito_user_pool.main_user_pool.id
+}
+
+resource "aws_cognito_user_group" "admins" {
+    name = "admins"
+    user_pool_id = aws_cognito_user_pool.main_user_pool.id
 }
