@@ -51,7 +51,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "main-role" {
     identity_pool_id = aws_cognito_identity_pool.main_identity.id
 
     roles = {
-        iam = var.aws_iam_labrole_arn
+        authenticated = var.aws_iam_labrole_arn
     }
 }
 
